@@ -7,6 +7,7 @@ env:
     - APP_NAME=qe-6.5-normal
     - DOCKER_USERNAME=singularitti
     - VERSION=latest
+    - secure: TUrKeNpMWON53K5MGwjHdmNlUATcQop8fcjhGQ52zwNmt827zSntDG4+HOsDe/1UPfTvR2rPma5juW5uvqMCTfK2OZR6OaM/w9hV1lAKjlAf3E+wLuLB7AME/Et2eg9tcYLRwtmQIwpYLnll1ekcjlGkm59AB2ZhPFm6saZfAceFKst9Q3hottIWKqzebSPv9yDvSkJlsJE4ssvPSTFhTXjW4ZFY2cyBJfYoh1lCTTk3C8lCZf+jgbZF7rgqoS41fAAE3JYgOg02gzafCEIbm928bzifglddOmpcbGIKahAZbfwWpoxV6BZyRU4Hc1Bhav5N/BrHigs37bS+cCMNlpwNNtXuqrCNRRLGMcn2Ut55VZXRX2pT+Cnn1Bfigov+1/NiatRp5rNup+g4C/KLIrag1NV8yxtPnF7a/pnGmQ9DY+ixrAge2nUKSccG0H/hetSHfSx4HtqmlDv43cwVMm3eKTo+BFSC34flIamHe0VjJwSoKQK90HlIxUvKfHUbw+meKMOhxPDW0ddivcHHb2rfh/llm1JOEiP1cKc1Li38uyyKRPcCcENt7rZuCD1pvII4c4+aLfSF3KGTCBCDY0p6tNnl6LwCKNCF2/Y5cnVsjUTbh0WQM+ZMmVULVE2V1i9PkHybgbZgJU7EZkQj8RQzEsYkyH3bhiP12M/QK0U=
 services:
   - docker
 after_success:
