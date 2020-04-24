@@ -1,0 +1,17 @@
+sudo: required #is required to use docker service in travis
+
+language: shell
+
+env:
+  matrix:
+    - APP_NAME=qe-6.5-normal
+    - DOCKER_USERNAME=singularitti
+    - VERSION=latest
+services:
+  - docker
+after_success:
+  - docker --version
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build --rm -f "Dockerfile" -t $APP_NAME:$TRAVIS_BUILD_ID .
+  - docker tag $APP_NAME:$TRAVIS_BUILD_ID $DOCKER_USERNAME/$APP_NAME:$VERSION
+  - docker push $DOCKERHUB_ACCOUNT/$APP_NAME:$VERSION
