@@ -1,12 +1,15 @@
 # Referenced from https://github.com/rinnocente/qe-full-6.2.1/blob/master/Dockerfile
-
 FROM ubuntu:latest
-
-WORKDIR /root/
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV QE_VER="-6.5"
+ENV QE_HD="/home/qe" \
+    QE_VER="-6.5"
+
+RUN adduser qe \
+    && usermod -aG sudo qe \
+	&& echo "export OMP_NUM_THREADS=1" >>/home/qe/.bashrc \
+	&& echo export PATH=/home/qe/qe"${QE_VER}"/bin:"${PATH}" >>/home/qe/.bashrc
 
 RUN \
     apt-get update -y  && \
@@ -15,7 +18,9 @@ RUN \
     apt-get -qq autoclean && apt-get -qq autoremove
 
 RUN apt-get update && apt-get -qq upgrade -y && apt-get install -y -q \
-    zsh openmpi-bin openmpi-doc libopenmpi-dev libblas-dev liblapack-dev libscalapack-openmpi-dev
+    zsh openmpi-bin openmpi-doc libopenmpi-dev libblas-dev liblapack-dev libscalapack-openmpi-dev vim
+
+WORKDIR "$QE_HD"
 
 # we create the user 'qe' and add it to the list of sudoers
 RUN \
@@ -29,7 +34,11 @@ RUN (cd qe"${QE_VER}" || exit; \
 RUN	mkdir -p downloads \
     && mv qe"${QE_VER}"-ReleasePack.tgz downloads/
 
+RUN chown -R qe:qe "${QE_HD}"
+
 RUN	apt-get install -yq libxext-dev
+
+USER qe
 
 SHELL ["/usr/bin/zsh", "-c"]
 
@@ -38,4 +47,6 @@ RUN cd ~/ && zsh && \
     setopt EXTENDED_GLOB && \
     for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"; done
 
-CMD ["sshd","-D"]
+RUN echo export PATH=/home/qe/qe"${QE_VER}"/bin:"${PATH}" >>/home/qe/.zshrc
+
+CMD ["sudo","sshd","-D"]
