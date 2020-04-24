@@ -3,7 +3,7 @@ sudo: required #is required to use docker service in travis
 language: shell
 
 env:
-  matrix:
+  global:
     - APP_NAME=qe-6.5-normal
     - DOCKER_USERNAME=singularitti
     - VERSION=latest
