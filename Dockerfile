@@ -7,6 +7,7 @@ ENV QE_HD="/home/qe" \
     QE_VER="-6.5"
 
 RUN adduser -q --disabled-password --gecos qe qe \
+    && mkdir -p /etc/sudoers.d/ \
     && printf "\nqe ALL=(ALL:ALL) NOPASSWD:ALL\n" >>/etc/sudoers.d/qe \
     && (echo "qe:mammamia" | chpasswd) \
     && echo export PATH=/home/qe/qe"${QE_VER}"/bin:"${PATH}" >>/home/qe/.bashrc
