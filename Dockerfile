@@ -8,7 +8,6 @@ ENV QE_HD="/home/qe" \
 
 RUN adduser qe \
     && usermod -aG sudo qe \
-	&& echo "export OMP_NUM_THREADS=1" >>/home/qe/.bashrc \
 	&& echo export PATH=/home/qe/qe"${QE_VER}"/bin:"${PATH}" >>/home/qe/.bashrc
 
 RUN \
