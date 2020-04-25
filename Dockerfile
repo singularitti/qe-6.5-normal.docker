@@ -6,9 +6,10 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV QE_HD="/home/qe" \
     QE_VER="-6.5"
 
-RUN adduser qe \
-    && usermod -aG sudo qe \
-	&& echo export PATH=/home/qe/qe"${QE_VER}"/bin:"${PATH}" >>/home/qe/.bashrc
+RUN adduser -q --disabled-password --gecos qe qe \
+    && printf "\nqe ALL=(ALL:ALL) NOPASSWD:ALL\n" >>/etc/sudoers.d/qe \
+    && (echo "qe:mammamia" | chpasswd) \
+    && echo export PATH=/home/qe/qe"${QE_VER}"/bin:"${PATH}" >>/home/qe/.bashrc
 
 RUN apt-get update -y && \
     apt-get upgrade -y && \
@@ -26,7 +27,7 @@ RUN \
     && tar xzf qe"${QE_VER}"-ReleasePack.tgz
 
 RUN (cd qe"${QE_VER}" || exit; \
-    ./configure -enable-openmp -with-internal-blas -with-internal-lapack -with-scalapack -with-elpa-lib -with-libxc; \
+    ./configure -enable-openmp -with-internal-blas -with-internal-lapack -with-scalapack; \
     make all)
 
 RUN	mkdir -p downloads \
@@ -46,5 +47,3 @@ RUN cd ~/ && zsh && \
     for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"; done
 
 RUN echo export PATH=/home/qe/qe"${QE_VER}"/bin:"${PATH}" >>/home/qe/.zshrc
-
-CMD ["sudo","sshd","-D"]
