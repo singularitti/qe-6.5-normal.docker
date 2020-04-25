@@ -10,14 +10,13 @@ RUN adduser qe \
     && usermod -aG sudo qe \
 	&& echo export PATH=/home/qe/qe"${QE_VER}"/bin:"${PATH}" >>/home/qe/.bashrc
 
-RUN \
-    apt-get update -y  && \
+RUN apt-get update -y && \
     apt-get upgrade -y && \
     apt-get install -y cpio wget make git gcc g++ python ssh autotools-dev autoconf automake texinfo libtool patch flex && \
     apt-get -qq autoclean && apt-get -qq autoremove
 
 RUN apt-get update && apt-get -qq upgrade -y && apt-get install -y -q \
-    zsh openmpi-bin openmpi-doc libopenmpi-dev libblas-dev liblapack-dev libscalapack-openmpi-dev vim
+    zsh openmpi-bin openmpi-doc libopenmpi-dev libblas-dev liblapack-dev libscalapack-openmpi-dev libelpa-dev libxc-dev vim
 
 WORKDIR "$QE_HD"
 
@@ -27,7 +26,7 @@ RUN \
     && tar xzf qe"${QE_VER}"-ReleasePack.tgz
 
 RUN (cd qe"${QE_VER}" || exit; \
-    ./configure -enable-openmp -with-internal-blas -with-internal-lapack -with-scalapack; \
+    ./configure -enable-openmp -with-internal-blas -with-internal-lapack -with-scalapack -with-elpa-lib -with-libxc; \
     make all)
 
 RUN	mkdir -p downloads \
